@@ -9,10 +9,11 @@ Task: Implementation of a Language detection model based on N-grams
 Constants
 """
 
-#We consider 5 languages from the Corpora dataset
+#We consider 5 languages from the Corpora dataset (Add new languages in this list)
 lang = ["french" ,"english","german","italian","dutch"]
 
-
+#Update value of n (n=2,3,4)
+n = 2 
 
 #Dataset path (Update correct path )
 train_path = "Data/Train"

@@ -25,7 +25,6 @@ def calculate_total_ngrams(model):
     """
     no_of_ngrams = []
     for i,l in enumerate(lang):
-        #model = np.load(lang+".npy")
         total = 0
         for key,v in model[i]:
             total = total + v
@@ -71,7 +70,6 @@ def train_language_model(n):
         ngram_model = sorted(ngram.ngram_fd.items(), key=lambda item: item[1],reverse=True)  
  
         print("Length of",l,"model:",len(ngram_model))
-        print(ngram_model)
         
         np.save(os.path.join(checkpoint_path,l+str(n)+"gram.npy"),ngram_model)
 
