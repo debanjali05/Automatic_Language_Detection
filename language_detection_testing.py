@@ -21,7 +21,7 @@ from language_modelling import predict_language_model
 #reading the testing data text files in unicode
 print("\t-------Loading Test Set-------")
 test_set = load_dataset("Testing") #generating the train set
-test_set = random.sample(test_set,100) #random sampling of test sets (reducing the size of test set)
+#test_set = random.sample(test_set,100) #random sampling of test sets (reducing the size of test set)
 print("Length of Test set:", len(test_set))
 
 print("\t-------Start Testing------")
