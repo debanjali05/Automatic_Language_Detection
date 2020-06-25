@@ -11,6 +11,7 @@ Testing the Language detection model
 
 
 import os
+import random
 import numpy as np
 
 from data import load_dataset
@@ -20,6 +21,7 @@ from language_modelling import predict_language_model
 #reading the testing data text files in unicode
 print("\t-------Loading Test Set-------")
 test_set = load_dataset("Testing") #generating the train set
+test_set = random.sample(test_set,100) #random sampling of test sets (reducing the size of test set)
 print("Length of Test set:", len(test_set))
 
 print("\t-------Start Testing------")
@@ -30,14 +32,6 @@ for n in range(2,3):
     print("Loading",n,"-gram Saved Models------->")
     model = [np.load(os.path.join(checkpoint_path,l+str(n)+"gram.npy")) for l in lang] 
  
-    """
-    #Loading saved model
-    print("Loading saved",n,"-gram Language Detection model------->")
-    classifier_name = "classifier" + str(n)+".pickle"
-    f = open(os.path.join(checkpoint_path,classifier_name), 'rb')
-    classifier = pickle.load(f)
-    f.close()
-    """
     confusion_matrix = np.zeros((5,5))   
     correct_prediction = 0
     
@@ -50,21 +44,23 @@ for n in range(2,3):
         
         #Predicting the language
         prediction = predict_language_model(words,n,model)
+        #print(lang[prediction])
+        #print(label)
         
-        if(prediction == label):
+        if(lang[prediction] == label):
             correct_prediction += 1
         
         pred_index = 0
         cor_index = 0
                 
         for j,language in enumerate(lang):
-            if(language == prediction):
+            if(language == lang[prediction]):
                 pred_index = j
             if(language == label):
                 cor_index = j
                 
         confusion_matrix[cor_index][pred_index] += 1
                 
-    print("Confusion Matrix",confusion_matrix)
+    print("Confusion Matrix: \n",confusion_matrix)
     print(n,"-gram Accuracy", correct_prediction/len(test_set)*100)
 print("\t-------End Testing------")                

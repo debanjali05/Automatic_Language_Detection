@@ -49,7 +49,8 @@ def build_dataset(path,language):
     #Reading the training data text files in unicode
     with codecs.open(path,"r","utf-8") as filep:
          
-        for i,line in enumerate(filep): 
+        for i,line in enumerate(filep):
+        
             line = preprocessing(line) #preprocessing on data
             df = (line,language) #adding language label
             language_set.append(df)

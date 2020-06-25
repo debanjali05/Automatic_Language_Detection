@@ -18,6 +18,11 @@ from utils import train_path, train_lang_path, checkpoint_path, lang
 from nltk.collocations import BigramCollocationFinder, TrigramCollocationFinder, QuadgramCollocationFinder
 
 def calculate_total_ngrams(model):
+    """
+       calculating total number of N-grams
+       
+       model: list of saved models
+    """
     no_of_ngrams = []
     for i,l in enumerate(lang):
         #model = np.load(lang+".npy")
@@ -29,7 +34,7 @@ def calculate_total_ngrams(model):
 
 def generating_ngrams(words, n):
     """
-       generating individual langugae models
+       generating individual language models
     
         words: list of words present in a particular language (list(string))
         n: value of n for generating n-grams, values are 2,3,4 (int)
@@ -65,11 +70,19 @@ def train_language_model(n):
         ngram_model = ngram.ngram_fd.items() 
         ngram_model = sorted(ngram.ngram_fd.items(), key=lambda item: item[1],reverse=True)  
  
-        print("Length of",n,"-gram model:",len(ngram_model))
+        print("Length of",l,"model:",len(ngram_model))
+        print(ngram_model)
         
         np.save(os.path.join(checkpoint_path,l+str(n)+"gram.npy"),ngram_model)
 
 def predict_language_model(words,n,model):
+    """
+       predicting language
+    
+        words: list of words present in a particular language (list(string))
+        n: value of n for generating n-grams, values are 2,3,4 (int)
+        model: list of saved models
+    """
     
     ngram = generating_ngrams(words,n) #generating N-gram
     total = calculate_total_ngrams(model) #calculating total N-grams
@@ -82,15 +95,16 @@ def predict_language_model(words,n,model):
         for i,l in enumerate(lang):
             for key,f in model[i]:
                 if k == key:
-                    freq_sum[i] = freq_sum[i]+ math.log(f/total[i],2) #log(p1*p2) = log(p1) +log(p2)
+                    freq_sum[i] = freq_sum[i]+ math.log(f/total[i],2)*(-1) #log(p1*p2) = log(p1) +log(p2)
                     there = 1
                     break
         if not there:
-             freq_sum[i] = freq_sum[i]+1
+             freq_sum[i] = freq_sum[i]+0
  
-    max_val = freq_sum.max() #prediction label with the max probability
-            
-    return max_val #prediction
+    #max_val = freq_sum.max() #prediction label with the max probability
+    index= freq_sum.argmax() #prediction label with the max probability
+       
+    return index #prediction
     
     
     
